@@ -355,10 +355,11 @@ class BlueSea {
     const materialList = await this.getMaterials();
     const material = materialList.find((it) => it.text === text);
     const level = material.learn.level + 1;
-    const rate = Math.random() / 5 + 0.9; // [0.9, 1.1]
 
     if (this.forgettingCurve[level]) {
-      const time = dayjs().add(this.forgettingCurve[level] * rate, 'm').format();
+      const rate = Math.random() / 10; // [0, 0.1]
+      const minutes = Math.round(this.forgettingCurve[level] + (this.forgettingCurve[level] + 100) * rate);
+      const time = dayjs().add(minutes, 'm').format();
       material.learn = {
         level,
         learnDate: time,
