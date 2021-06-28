@@ -117,7 +117,9 @@ const SuperCard = ({ material, needLearn }) => {
               <div style="margin-bottom: 4px;">
                 <div>添加自：</div>
                 <div>
-                  <a href="${material.addFrom}">${material.addFrom ? "点击此可跳转" : "未知来源"}</a>
+                  <a href="${material.addFrom}" target="_blank" onClick=${(e) => {
+                    e.stopPropagation()
+                  }}>${material.addFrom ? "点击此可跳转" : "未知来源"}</a>
                 </div>
               </div>
 
@@ -129,7 +131,7 @@ const SuperCard = ({ material, needLearn }) => {
   `;
 };
 
-const ModalLearnCard = ({ visible, onClose, material }) => {
+const ModalLearnCard = ({ visible, onClose, material, allowLearnOperation }) => {
   if (!visible) {
     return '';
   }
@@ -172,7 +174,7 @@ const ModalLearnCard = ({ visible, onClose, material }) => {
       >
         <${SuperCard} material=${material} needLearn=${needLearn} />
 
-        ${needLearn
+        ${(needLearn && allowLearnOperation)
           ? html` <div
               style="
                 display: flex;
@@ -399,6 +401,7 @@ const Material = () => {
   return html`
     <div style="height: 400px; overflow-y: auto; box-sizing: border-box;">
       <${ModalLearnCard}
+        allowLearnOperation=${!config['单词弹幕']}
         visible=${!!selectedMaterial}
         material=${selectedMaterial}
         onClose=${() => {
@@ -488,7 +491,6 @@ const Material = () => {
                         const keys = [
                           'ctime',
                           'learn',
-                          'statistics',
                           'text',
                           'translation',
                           'youdao',
